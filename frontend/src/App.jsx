@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import deleteTask from './event/DeleteHandler';
 function App() {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState({ task: '' });
@@ -24,14 +25,14 @@ function App() {
       console.error('Error adding task:', error);
     }
   };
-  const deleteTask = async (id) => {
-    try {
-      await axios.delete(`http://localhost:3001/tasks/${id}`);
-      fetchTasks();
-    } catch (error) {
-      console.error('Error deleting task:', error);
-    }
-  };
+  // const deleteTask = async (id) => {
+  //   try {
+  //     await axios.delete(`http://localhost:3001/tasks/${id}`);
+  //     fetchTasks();
+  //   } catch (error) {
+  //     console.error('Error deleting task:', error);
+  //   }
+  // };
   const handleEdit = (task) => {
     setEditTask({ id: task.id, task: task.task });
   }
@@ -46,24 +47,16 @@ function App() {
   }
   const toggleCompleted = async (id, completed) => {
     try {
-      // Send the request to update the completed status in the backend
       await axios.put(`http://localhost:3001/tasks/${id}`, { completed: completed ? 0 : 1 });
-
-      // Optimistically update the completed status locally
       const updatedTasks = tasks.map(task =>
         task.id === id ? { ...task, completed: !completed } : task
       );
       setTasks(updatedTasks);
     } catch (error) {
       console.error('Error toggling completed status:', error);
-      // Revert the local update if an error occurs
       fetchTasks();
     }
   };
-
-
-
-
   return (
     <div className="container">
       <h1 className="title">Task Manager</h1>
@@ -91,9 +84,10 @@ function App() {
               ) : (
                 <>
                   <b className={task.completed ? "task-item completed" : "task-item"} > {task.task}</b>
+
                   <button className="edit-button" onClick={() => handleEdit(task)}>Edit</button>
-                  <button className='completed-btn' onClick={() => toggleCompleted(task.id, task.completed)}>{!task.completed? 'completed' : 'incomplete'}</button>
-                  <button className="delete-button  " onClick={() => deleteTask(task.id)}>Delete</button>
+                  <button className='completed-btn' onClick={() => toggleCompleted(task.id, task.completed)}>{!task.completed ? 'completed' : 'incomplete'}</button>
+                  <button className="delete-button  " onClick={() => deleteTask(task.id, fetchTasks)}>Delete</button>
                 </>
               )
             }
