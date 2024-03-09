@@ -42,19 +42,40 @@ app.post("/tasks", (req, res) => {
 	});
 });
 
-// Update task
+// // Update task
+// app.put("/tasks/:id", (req, res) => {
+// 	const taskId = req.params.id;
+// 	const { task } = req.body;
+// 	db.query(
+// 		"UPDATE tasks SET task = ? WHERE id = ?",
+// 		[task, taskId],
+// 		(err, result) => {
+// 			if (err) throw err;
+// 			res.send("Task updated successfully");
+// 		}
+// 	);
+// });
+// Update task content and completed status
 app.put("/tasks/:id", (req, res) => {
-	const taskId = req.params.id;
-	const { task } = req.body;
-	db.query(
-		"UPDATE tasks SET task = ? WHERE id = ?",
-		[task, taskId],
-		(err, result) => {
-			if (err) throw err;
-			res.send("Task updated successfully");
-		}
-	);
+    const taskId = req.params.id;
+    const { task, completed } = req.body;
+    const updates = {};
+    if (task) updates.task = task;
+    if (completed !== undefined) updates.completed = completed;
+
+    db.query(
+        "UPDATE tasks SET ? WHERE id = ?",
+        [updates, taskId],
+        (err, result) => {
+            if (err) {
+                console.error('Error updating task:', err);
+                return res.status(500).json({ error: "An error occurred while updating the task" });
+            }
+            res.send("Task updated successfully");
+        }
+    );
 });
+
 
 // Delete task
 app.delete("/tasks/:id", (req, res) => {

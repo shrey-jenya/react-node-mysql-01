@@ -44,6 +44,26 @@ function App() {
       console.error('error updating task', error);
     }
   }
+  const toggleCompleted = async (id, completed) => {
+    try {
+      // Send the request to update the completed status in the backend
+      await axios.put(`http://localhost:3001/tasks/${id}`, { completed: completed ? 0 : 1 });
+
+      // Optimistically update the completed status locally
+      const updatedTasks = tasks.map(task =>
+        task.id === id ? { ...task, completed: !completed } : task
+      );
+      setTasks(updatedTasks);
+    } catch (error) {
+      console.error('Error toggling completed status:', error);
+      // Revert the local update if an error occurs
+      fetchTasks();
+    }
+  };
+
+
+
+
   return (
     <div className="container">
       <h1 className="title">Task Manager</h1>
@@ -63,16 +83,17 @@ function App() {
             {
               editTask.id === task.id ? (
                 <>
-                <input type="text"  value={editTask.task}
-                onChange={(e)=>setEditTask({...editTask , task:e.target.value})}
-                />
-                <button onClick={saveEdit}>Save</button>
+                  <input type="text" value={editTask.task}
+                    onChange={(e) => setEditTask({ ...editTask, task: e.target.value })}
+                  />
+                  <button onClick={saveEdit}>Save</button>
                 </>
               ) : (
                 <>
-                  <b > {task.task}</b>
-                  <button className="delete-button" onClick={() => handleEdit(task)}>Edit</button>
-                  <button className="delete-button" onClick={() => deleteTask(task.id)}>Delete</button>
+                  <b className={task.completed ? "task-item completed" : "task-item"} > {task.task}</b>
+                  <button className="edit-button" onClick={() => handleEdit(task)}>Edit</button>
+                  <button className='completed-btn' onClick={() => toggleCompleted(task.id, task.completed)}>{!task.completed? 'completed' : 'incomplete'}</button>
+                  <button className="delete-button  " onClick={() => deleteTask(task.id)}>Delete</button>
                 </>
               )
             }

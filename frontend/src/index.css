@@ -3,7 +3,11 @@
 	margin: 0 auto;
 	padding: 20px;
 }
-
+body {
+	background-color: black;
+	color: wheat;
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
 .title {
 	text-align: center;
 }
@@ -41,7 +45,8 @@
 	margin-bottom: 5px;
 }
 b {
-	width: 190px;
+	width: 400px;
+	color: white;
 }
 .delete-button {
 	padding: 5px 10px;
@@ -53,3 +58,29 @@ b {
 	border-radius: 4px;
 	cursor: pointer;
 }
+.edit-button {
+	padding: 5px 10px;
+	margin-left: 10px;
+	background-color: #35a7dc;
+	color: white;
+
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+.completed {
+	text-decoration: line-through;
+	color: gray;
+}
+.completed-btn {
+	padding: 5px 10px;
+	margin-left: 10px;
+	background-color: #8335dc;
+	color: white;
+
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+.scale-out-vertical{-webkit-animation:scale-out-vertical .5s cubic-bezier(.55,.085,.68,.53) both;animation:scale-out-vertical .5s cubic-bezier(.55,.085,.68,.53) both}
+@-webkit-keyframes scale-out-vertical{0%{-webkit-transform:scaleY(1);transform:scaleY(1);opacity:1}100%{-webkit-transform:scaleY(0);transform:scaleY(0);opacity:1}}@keyframes scale-out-vertical{0%{-webkit-transform:scaleY(1);transform:scaleY(1);opacity:1}100%{-webkit-transform:scaleY(0);transform:scaleY(0);opacity:1}}
