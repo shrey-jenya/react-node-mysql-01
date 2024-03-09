@@ -30,9 +30,15 @@ app.get("/tasks", (req, res) => {
 // Add new task
 app.post("/tasks", (req, res) => {
 	const { task } = req.body;
+	if(!task || task.trim()===''){
+		return res.status(400).json({error:'task field is required'});
+	}
 	db.query("INSERT INTO tasks (task) VALUES (?)", [task], (err, result) => {
-		if (err) throw err;
-		res.send("Task added successfully");
+		if (err) {
+            console.error('Error adding task:', err);
+            return res.status(500).json({ error: "An error occurred while adding the task" });
+        }
+        res.send("Task added successfully");
 	});
 });
 
